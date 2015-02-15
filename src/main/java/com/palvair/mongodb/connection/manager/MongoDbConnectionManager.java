@@ -32,13 +32,6 @@ public class MongoDbConnectionManager implements ConnectionManager {
         return new MongoClient(new ServerAddress(uri), Arrays.asList(credential));
     }
 
-    public void clean(final String dbName, final String collection) throws NamingException, UnknownHostException, SQLException {
-        final MongoClient mongoClient = getConnection();
-        final DB db = mongoClient.getDB(dbName);
-        final DBCollection dbCollection = db.getCollection(collection);
-        dbCollection.drop();
-    }
-
     public DBCollection getDbCollection(final String dbName, final String collection) throws NamingException, UnknownHostException, SQLException {
         return getDB(dbName).getCollection(collection);
     }

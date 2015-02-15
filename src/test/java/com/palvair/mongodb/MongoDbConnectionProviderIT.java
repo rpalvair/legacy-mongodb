@@ -2,6 +2,7 @@ package com.palvair.mongodb;
 
 import com.google.common.base.Stopwatch;
 import com.mongodb.*;
+import com.palvair.mongodb.connection.manager.CollectionHelper;
 import com.palvair.mongodb.connection.manager.MongoDbConnectionManager;
 import lombok.extern.log4j.Log4j;
 import org.junit.After;
@@ -26,12 +27,15 @@ public class MongoDbConnectionProviderIT {
 
     private final MongoDbConnectionManager unitUnderTest = new MongoDbConnectionManager();
 
-    private final int NB_RECORDS = 2000000;
+    private final CollectionHelper collectionHelper = new CollectionHelper(unitUnderTest);
+
+    private final int NB_RECORDS = 1000;
 
     @Before
     public void setUp() {
         try {
             final DBCollection dbCollection = unitUnderTest.getDbCollection("mybd", "testData");
+            log.info("initial count = "+dbCollection.count());
             log.info("Attempt to insert "+NB_RECORDS+" of records...");
             final Stopwatch stopwatch = Stopwatch.createStarted();
             for (int i = 0; i < NB_RECORDS; i++) {
@@ -50,7 +54,8 @@ public class MongoDbConnectionProviderIT {
     @After
     public void after() {
         try {
-            unitUnderTest.clean("mydb", "testData");
+            final DBCollection dbCollection = unitUnderTest.getDbCollection("mybd", "testData");
+            dbCollection.drop();
         } catch (Exception e) {
             log.error(e);
         }
@@ -62,7 +67,7 @@ public class MongoDbConnectionProviderIT {
         assertNotNull(dbCollection);
 
         final long count = dbCollection.count();
-        log.info("count = " + count);
+        //log.info("count = " + count);
         final DBCursor dbCursor = dbCollection.find();
         final Iterator<DBObject> iterator = dbCursor.iterator();
         /*while (iterator.hasNext()) {
