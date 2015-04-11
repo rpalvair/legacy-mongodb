@@ -14,7 +14,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.naming.NamingException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -42,6 +44,7 @@ public class MongoDbConnectionProviderIT {
                 final DBObject insert = new BasicDBObject();
                 insert.put("name", "Billy");
                 insert.put("age", "30");
+                insert.put("timestamp",new Date());
                 dbCollection.save(insert);
             }
             stopwatch.stop();
