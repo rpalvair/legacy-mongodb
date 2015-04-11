@@ -34,7 +34,7 @@ public class MongoDbConnectionProviderIT {
     @Before
     public void setUp() {
         try {
-            final DBCollection dbCollection = unitUnderTest.getDbCollection("mybd", "testData");
+            final DBCollection dbCollection = unitUnderTest.getDbCollection("mydb", "testData");
             log.info("initial count = "+dbCollection.count());
             log.info("Attempt to insert "+NB_RECORDS+" of records...");
             final Stopwatch stopwatch = Stopwatch.createStarted();
@@ -51,10 +51,10 @@ public class MongoDbConnectionProviderIT {
         }
     }
 
-    @After
+    //@After
     public void after() {
         try {
-            final DBCollection dbCollection = unitUnderTest.getDbCollection("mybd", "testData");
+            final DBCollection dbCollection = unitUnderTest.getDbCollection("mydb", "testData");
             dbCollection.drop();
         } catch (Exception e) {
             log.error(e);
@@ -63,7 +63,7 @@ public class MongoDbConnectionProviderIT {
 
     @Test
     public void getConnection_Localhost_ShouldReturnAMongoClient() throws NamingException, UnknownHostException, SQLException {
-        final DBCollection dbCollection = unitUnderTest.getDbCollection("mybd", "testData");
+        final DBCollection dbCollection = unitUnderTest.getDbCollection("mydb", "testData");
         assertNotNull(dbCollection);
 
         final long count = dbCollection.count();
